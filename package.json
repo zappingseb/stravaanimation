@@ -1,0 +1,29 @@
+{
+  "name": "strava-runner-animation",
+  "version": "1.0.0",
+  "description": "Animated running route visualization from Strava data",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "axios": "^1.6.0",
+    "mongoose": "^8.0.0",
+    "dotenv": "^16.3.1",
+    "express-session": "^1.17.3",
+    "connect-mongo": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/express-session": "^1.17.10",
+    "typescript": "^5.4.0",
+    "ts-node-dev": "^2.0.0"
+  }
+}

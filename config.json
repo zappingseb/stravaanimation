@@ -1,0 +1,16 @@
+{
+  "strava": {
+    "redirectUri": "http://localhost:3000/auth/strava/callback"
+  },
+  "animation": {
+    "startDate": "2024-01-01",
+    "endDate": "2024-12-31",
+    "centerLat": 48.1632786590305,
+    "centerLng": 11.593103827102233,
+    "radiusMeters": 9000,
+    "animationDurationSeconds": 90
+  },
+  "database": {
+    "mongoUri": "mongodb://localhost:27017/strava-runner"
+  }
+}

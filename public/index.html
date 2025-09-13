@@ -1,0 +1,633 @@
+<!--- Working state -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strava Runner Animation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: white;
+            overflow: hidden;
+        }
+
+        .app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #fc4c02, #ff7b00);
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-card h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .login-card p {
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .strava-btn {
+            background: #fc4c02;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .strava-btn:hover {
+            background: #e63c00;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .map-container {
+            position: relative;
+            flex: 1;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .overlay {
+            position: absolute;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .date-display {
+            top: 20px;
+            left: 20px;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-family: 'Courier New', monospace;
+        }
+
+        .stats-display {
+            bottom: 20px;
+            right: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            text-align: right;
+        }
+
+        .flip-animation {
+            display: inline-block;
+            animation: flip 0.3s ease-in-out;
+        }
+
+        @keyframes flip {
+            0% { transform: rotateX(0); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0); }
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .burger-line {
+            width: 20px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .controls.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+        }
+
+        .controls.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .btn {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .runner-icon {
+            width: 20px;
+            height: 20px;
+            background: #ff4444;
+            border-radius: 50%;
+            border: 2px solid white;
+            position: absolute;
+            z-index: 1002;
+            transition: all 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div v-if="!authenticated && !loading" class="login-screen">
+            <div class="login-card">
+                <h1>🏃‍♂️ Runner Animation</h1>
+                <p>Connect your Strava account to visualize your running journey</p>
+                <a href="/auth/strava" class="strava-btn">Connect with Strava</a>
+            </div>
+        </div>
+
+        <div v-if="loading" class="loading">
+            <h2>Loading your running data...</h2>
+            <p v-if="syncStatus">{{ syncStatus }}</p>
+        </div>
+
+        <div v-if="authenticated && !loading" class="app">
+            <!-- Burger Menu -->
+            <div class="burger-menu" @click="toggleControls">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </div>
+
+            <!-- Main Controls -->
+            <div class="controls" :class="{ 'visible': controlsVisible, 'hidden': !controlsVisible }">
+                <button @click="startAnimation" :disabled="isAnimating" class="btn">
+                    {{ isAnimating ? 'Playing...' : 'Start Animation' }}
+                </button>
+                <button @click="drawAllRoutes" :disabled="isAnimating" class="btn">
+                    Show All Routes
+                </button>
+                <button @click="clearRoutes" :disabled="isAnimating" class="btn">
+                    Clear Routes
+                </button>
+                <button @click="logout" class="btn">Logout</button>
+            </div>
+
+            <!-- Zoom Controls -->
+            <div class="zoom-controls">
+                <button @click="zoomIn" class="zoom-btn">+</button>
+                <button @click="zoomOut" class="zoom-btn">-</button>
+            </div>
+
+            <div class="map-container">
+                <div id="map"></div>
+                
+                <div class="overlay date-display" :class="{ 'flip-animation': dateFlipping }">
+                    {{ currentDate }}
+                </div>
+                
+                <div class="overlay stats-display" :class="{ 'flip-animation': statsFlipping }">
+                    {{ currentKm }} km<br>
+                    <small style="font-size: 0.7em;">since Jan 1st</small>
+                </div>
+
+                <div v-if="runnerPosition" class="runner-icon" 
+                     :style="{ left: runnerPosition.x + 'px', top: runnerPosition.y + 'px' }">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    authenticated: false,
+                    loading: true,
+                    syncStatus: '',
+                    map: null,
+                    activities: [],
+                    config: null,
+                    isAnimating: false,
+                    currentDate: 'Jan 1, 2024',
+                    currentKm: '0.0',
+                    dateFlipping: false,
+                    statsFlipping: false,
+                    runnerPosition: null,
+                    currentActivityIndex: 0,
+                    currentPointIndex: 0,
+                    drawnRoutes: [], // Keep track of drawn route polylines
+                    controlsVisible: false // Controls hidden by default
+                }
+            },
+            
+            async mounted() {
+                await this.checkAuthStatus();
+                
+                // Check if we just authenticated
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('authenticated')) {
+                    this.loading = true;
+                    this.syncStatus = 'Syncing your activities...';
+                    await this.syncActivities();
+                    this.loading = false;
+                    window.history.replaceState({}, document.title, '/');
+                }
+            },
+
+            methods: {
+                async checkAuthStatus() {
+                    try {
+                        console.log('Checking auth status...');
+                        const response = await fetch('/api/auth/status', {
+                            credentials: 'include'
+                        });
+                        const data = await response.json();
+                        
+                        if (data.authenticated) {
+                            console.log('User authenticated');
+                            this.authenticated = true;
+                            await this.loadConfig();
+                            await this.loadActivities();
+                            this.initMap();
+                        } else {
+                            console.log('User not authenticated');
+                        }
+                    } catch (error) {
+                        console.error('Auth check failed:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                async syncActivities() {
+                    try {
+                        console.log('Syncing activities...');
+                        const response = await fetch('/api/activities/sync', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            this.syncStatus = `Synced ${data.syncedCount} activities`;
+                            console.log(`Sync completed: ${data.syncedCount} new activities`);
+                            // Reload activities after sync
+                            await this.loadActivities();
+                        }
+                    } catch (error) {
+                        console.error('Sync failed:', error);
+                        this.syncStatus = 'Sync failed';
+                    }
+                },
+
+                async loadConfig() {
+                    try {
+                        const response = await fetch('/api/config');
+                        this.config = await response.json();
+                    } catch (error) {
+                        console.error('Config load failed:', error);
+                    }
+                },
+
+                async loadActivities() {
+                    try {
+                        const response = await fetch('/api/activities', {
+                            credentials: 'include'
+                        });
+                        this.activities = await response.json();
+                        console.log(`Loaded ${this.activities.length} activities`);
+                    } catch (error) {
+                        console.error('Activities load failed:', error);
+                    }
+                },
+
+                initMap() {
+                    if (!this.config) {
+                        console.warn('Cannot init map: config not loaded');
+                        return;
+                    }
+
+                    // Remove existing map if any
+                    if (this.map) {
+                        this.map.remove();
+                    }
+
+                    setTimeout(() => {
+                        this.map = L.map('map', {
+                            center: [this.config.map.centerLat, this.config.map.centerLng],
+                            zoom: 14,
+                            zoomControl: false, // Disable default zoom control
+                            scrollWheelZoom: true, // Enable Ctrl+scroll zoom
+                            doubleClickZoom: true,
+                            boxZoom: false,
+                            keyboard: false,
+                            dragging: true // Enable dragging
+                        });
+
+                        // Dark tile layer
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                            subdomains: 'abcd',
+                            maxZoom: 20
+                        }).addTo(this.map);
+
+                        // Add radius circle
+                        L.circle([this.config.map.centerLat, this.config.map.centerLng], {
+                            radius: this.config.map.radiusMeters,
+                            fillColor: 'transparent',
+                            color: '#444',
+                            weight: 1,
+                            opacity: 0.5
+                        }).addTo(this.map);
+
+                        console.log('Map initialized successfully');
+                    }, 1000);
+                },
+
+                async startAnimation() {
+                    if (!this.activities.length || this.isAnimating) return;
+
+                    console.log('Starting animation with', this.activities.length, 'activities');
+                    this.isAnimating = true;
+                    this.currentActivityIndex = 0;
+                    this.currentPointIndex = 0;
+
+                    // Clear any existing routes
+                    this.clearRoutes();
+
+                    const totalDuration = this.config.animation.animationDurationSeconds * 1000;
+                    
+                    // Start continuous animation without stops
+                    await this.continuousAnimation(totalDuration);
+
+                    this.isAnimating = false;
+                },
+
+                async continuousAnimation(totalDuration) {
+                    const totalSteps = this.activities.reduce((sum, activity) => {
+                        return sum + Math.min(activity.coordinates?.length || 0, 50);
+                    }, 0);
+                    
+                    // Halve the duration for faster animation
+                    const stepDuration = (totalDuration / totalSteps) / 2;
+                    
+                    // Updated opacity formula
+                    const baseOpacity = Math.max(0.05, Math.min(0.9, 1.0 / Math.sqrt(this.activities.length / 1)));
+
+                    console.log(`Animation settings: ${totalSteps} total steps, ${stepDuration.toFixed(2)}ms per step, opacity: ${baseOpacity.toFixed(3)}`);
+
+                    for (let activityIndex = 0; activityIndex < this.activities.length; activityIndex++) {
+                        const activity = this.activities[activityIndex];
+                        const coordinates = activity.coordinates;
+                        
+                        if (!coordinates || coordinates.length === 0) {
+                            console.log(`Skipping activity ${activityIndex + 1}: no coordinates`);
+                            continue;
+                        }
+
+                        console.log(`Processing activity ${activityIndex + 1}/${this.activities.length}`);
+
+                        // Draw the route polyline immediately
+                        const routeCoords = coordinates.map(coord => [coord[0], coord[1]]);
+                        const polyline = L.polyline(routeCoords, {
+                            color: '#ff3300',
+                            weight: 4,
+                            opacity: baseOpacity,
+                            smoothFactor: 1.0,
+                            interactive: false
+                        });
+
+                        polyline.addTo(this.map);
+                        this.drawnRoutes.push(polyline);
+
+                        // Update date/stats at the start of each route
+                        this.updateDisplayContinuous(activity);
+
+                        // Animate runner along this route
+                        const steps = Math.min(coordinates.length, 50);
+                        const stepSize = Math.max(1, Math.floor(coordinates.length / steps));
+
+                        for (let i = 0; i < coordinates.length; i += stepSize) {
+                            const coord = coordinates[i];
+                            const point = this.map.latLngToContainerPoint([coord[0], coord[1]]);
+                            
+                            this.runnerPosition = {
+                                x: point.x - 10,
+                                y: point.y - 10
+                            };
+
+                            await this.sleep(stepDuration);
+                        }
+                    }
+
+                    console.log('Animation completed');
+                },
+
+                updateDisplayContinuous(activity) {
+                    // Trigger flip animations
+                    this.dateFlipping = true;
+                    this.statsFlipping = true;
+
+                    // Update immediately without waiting
+                    const date = new Date(activity.date);
+                    this.currentDate = date.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    this.currentKm = activity.cumulativeDistance.toFixed(1);
+                    
+                    // End flip animation after a short time
+                    setTimeout(() => {
+                        this.dateFlipping = false;
+                        this.statsFlipping = false;
+                    }, 300);
+                },
+
+                drawAllRoutes() {
+                    console.log(`Drawing all ${this.activities.length} routes immediately`);
+                    this.clearRoutes();
+                    
+                    // Use the same opacity formula
+                    const baseOpacity = Math.max(0.05, Math.min(0.9, 1.0 / Math.sqrt(this.activities.length / 1)));
+                    
+                    this.activities.forEach((activity, index) => {
+                        const coordinates = activity.coordinates;
+                        if (!coordinates || coordinates.length === 0) {
+                            console.log(`Skipping activity ${index + 1}: no coordinates`);
+                            return;
+                        }
+
+                        const routeCoords = coordinates.map(coord => [coord[0], coord[1]]);
+                        
+                        const polyline = L.polyline(routeCoords, {
+                            color: '#ff3300', // Bright red-orange
+                            weight: 4,
+                            opacity: baseOpacity,
+                            smoothFactor: 1.0,
+                            interactive: false
+                        });
+
+                        polyline.addTo(this.map);
+                        this.drawnRoutes.push(polyline);
+                        console.log(`Drew route ${index + 1} with ${coordinates.length} points`);
+                    });
+                    
+                    console.log(`Finished drawing ${this.drawnRoutes.length} routes with opacity ${baseOpacity.toFixed(3)}`);
+                },
+
+                clearRoutes() {
+                    console.log(`Clearing ${this.drawnRoutes.length} routes`);
+                    // Remove all drawn routes from map
+                    this.drawnRoutes.forEach((route, index) => {
+                        this.map.removeLayer(route);
+                        console.log(`Removed route ${index + 1}`);
+                    });
+                    this.drawnRoutes = [];
+                },
+
+                toggleControls() {
+                    this.controlsVisible = !this.controlsVisible;
+                },
+
+                zoomIn() {
+                    if (this.map) {
+                        this.map.zoomIn();
+                    }
+                },
+
+                zoomOut() {
+                    if (this.map) {
+                        this.map.zoomOut();
+                    }
+                },
+
+                sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                },
+
+                async logout() {
+                    try {
+                        await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        this.authenticated = false;
+                        this.activities = [];
+                        this.clearRoutes();
+                        if (this.map) {
+                            this.map.remove();
+                            this.map = null;
+                        }
+                    } catch (error) {
+                        console.error('Logout failed:', error);
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
