@@ -457,7 +457,7 @@ app.get("*", (req: Request, res: Response) => {
   }
 
   // Serve index.html for all other routes (including root "/")
-  const indexPath = path.join(__dirname, "../public", "index.html");
+  const indexPath = path.join(__dirname, "../public", req.path);
   console.log("Serving index.html from:", indexPath, "for path:", req.path);
 
   // Add cache-busting headers for development

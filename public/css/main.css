@@ -1,0 +1,167 @@
+:root {
+    --card-width: 1.2em;
+    --card-height: 1.6em;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #000;
+    color: white;
+    overflow: hidden;
+}
+
+.app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #fc4c02, #ff7b00);
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-card h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.login-card p {
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.strava-btn {
+    background: #fc4c02;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.strava-btn:hover {
+    background: #e63c00;
+    transform: translateY(-2px);
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+
+.map-container {
+    position: relative;
+    flex: 1;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.overlay {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.date-display {
+    top: 20px;
+    left: 20px;
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    font-family: 'Courier New', monospace;
+    display: flex;
+    gap: 2px;
+}
+
+.stats-display {
+    bottom: 20px;
+    right: 20px;
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.flap-display {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.stats-label {
+    font-size: 0.7em;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.runner-icon {
+    width: 20px;
+    height: 20px;
+    background: #ff4444;
+    border-radius: 50%;
+    border: 2px solid white;
+    position: absolute;
+    z-index: 1002;
+    transition: all 0.1s ease;
+}
+
+.activity-distance {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    font-size: 72px;
+    font-weight: bold;
+    color: #ff6600;
+    text-shadow: 
+        0 0 20px #ff6600,
+        0 0 40px #ff6600,
+        2px 2px 8px rgba(0,0,0,0.8);
+    font-family: 'Courier New', monospace;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.activity-distance.show {
+    opacity: 1;
+}
+
+.activity-distance .plus {
+    font-size: 0.8em;
+    vertical-align: super;
+}
