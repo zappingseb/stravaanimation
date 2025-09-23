@@ -35,6 +35,11 @@ export const app = createApp({
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("authenticated")) {
         await window.mainApp.animationEngine.initMap();
+
+        window.mainApp.displayManager.showActivityDistance(0, 0, true, 1200);
+        setTimeout(() => {
+          window.mainApp.animationEngine.startAnimation(this.activities);
+        }, 1200);
       }
     },
     isDigitOrDot(char) {
@@ -57,6 +62,7 @@ export const app = createApp({
       // Use your animationEngine here
       if (window.mainApp.animationEngine) {
         window.mainApp.isAnimating = true;
+        this.toggleControls();
         window.mainApp.animationEngine.startAnimation(this.activities);
       }
     },
@@ -72,8 +78,8 @@ export const app = createApp({
     },
     logout() {
       // whatever your logout logic is
-      window.location.href = '/logout'; // example
-    }
+      window.location.href = "/logout"; // example
+    },
   },
   data() {
     return {
@@ -92,6 +98,7 @@ export const app = createApp({
       currentPointIndex: 0,
       drawnRoutes: [],
       controlsVisible: false,
+      animationPhase: null, // 'entering', 'visible', 'exiting', or null
     };
   },
   async mounted() {
