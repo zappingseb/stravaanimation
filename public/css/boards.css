@@ -1,0 +1,93 @@
+/* Date (top left) and km (bottom right) boards; the km board turns into the finale. */
+
+.date-board,
+.distance-board {
+  position: absolute;
+  z-index: var(--z-overlay);
+  font-weight: bold;
+  text-shadow: var(--text-shadow);
+  pointer-events: none;
+}
+
+.date-board {
+  top: var(--edge);
+  left: var(--edge);
+  display: flex;
+  gap: 0.3em;
+  font-size: min(48px, 7vw); /* 5 cards must fit a 360px phone */
+}
+
+.distance-board {
+  bottom: var(--edge);
+  right: var(--edge);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: min(36px, 5.5vw); /* 6 cards (1684.9) must fit a 360px phone */
+}
+
+.distance-board__label {
+  margin-top: 4px;
+  font-size: 0.7em;
+  opacity: 0.8;
+}
+
+/* Finale: centered on the veil, year title + "DONE!" above the km in red */
+.distance-board.is-finale {
+  top: 49%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  z-index: var(--z-finale);
+  align-items: center;
+  transform: translate(-50%, -50%);
+}
+
+.distance-board.is-finale .distance-board__km .split-flap__card,
+.distance-board.is-finale .distance-board__label {
+  color: var(--color-accent);
+}
+
+.distance-board__year {
+  margin-bottom: 14px;
+  animation: fade-up-in 0.5s ease-out both;
+}
+
+.distance-board__title {
+  margin-bottom: 8px;
+  font-size: 1.6em;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  animation: fade-up-in 0.5s ease-out 0.8s both;
+}
+
+@media (min-width: 501px) {
+  .distance-board.is-finale .distance-board__km {
+    transform: scale(1.2);
+    transition: transform 0.8s var(--ease-soft);
+  }
+}
+
+/* "MY YEAR" + year cards, used by the title card and the finale */
+.year-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: var(--color-text);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.year-title__kicker {
+  font-size: clamp(16px, 5vw, 26px);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.year-title__year {
+  gap: 6px;
+  font-size: min(64px, 9vw); /* 4 cards incl. gaps must fit a 360px phone */
+}

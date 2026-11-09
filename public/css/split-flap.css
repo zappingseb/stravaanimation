@@ -1,0 +1,65 @@
+.flap-board {
+  --card-width: 1.2em;
+  --card-height: 1.6em;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.split-flap {
+  position: relative;
+  overflow: hidden;
+  width: var(--card-width);
+  height: var(--card-height);
+  font-size: var(--card-height);
+  white-space: pre;
+  backface-visibility: hidden;
+}
+
+.split-flap__card {
+  position: relative;
+  display: grid;
+  place-content: center;
+  width: var(--card-width);
+  height: var(--card-height);
+  font-size: 0.75em;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background: linear-gradient(0deg, #333 35%, #222 50%, #333 65%);
+  color: var(--color-text);
+  user-select: none;
+}
+
+/* the horizontal split line */
+.split-flap__card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #555;
+  transform: translateY(-0.5px);
+}
+
+.flap-enter-active,
+.flap-leave-active {
+  transition: all 0.05s ease-in;
+}
+
+.flap-leave-active {
+  position: absolute;
+}
+
+.flap-enter-from {
+  transform: rotateX(90deg);
+  color: #888;
+  background: linear-gradient(0deg, #555 35%, #333 50%, #555 65%);
+  box-shadow: 0 1px 5px #000;
+}
+
+.flap-leave-to {
+  transform: rotateX(-90deg);
+  color: #000;
+  background: linear-gradient(0deg, #222 35%, #111 50%, #222 65%);
+}

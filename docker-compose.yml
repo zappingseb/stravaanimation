@@ -1,34 +1,14 @@
-version: '3.8'
-
 services:
-  mongodb:
-    image: mongo:7
-    container_name: strava-mongo
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_DATABASE: strava-runner
-
   app:
     build: .
     container_name: strava-app
     restart: unless-stopped
     ports:
       - "3000:3000"
-    depends_on:
-      - mongodb
     environment:
       NODE_ENV: production
-      MONGO_URI: mongodb://mongodb:27017/strava-runner
-    env_file:
-      - .env
+      STRAVA_EXPORT_DIR: /data/export
     volumes:
       - ./config.json:/app/config.json:ro
       - ./public:/app/public:ro
-      - ./src:/app/src:ro
-
-volumes:
-  mongodb_data:
+      - ${STRAVA_EXPORT_DIR:?set STRAVA_EXPORT_DIR to your unzipped Strava export}:/data/export:ro

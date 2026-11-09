@@ -1,0 +1,81 @@
+:root {
+  --font-mono: "Courier New", monospace;
+  --color-text: #fff;
+  --color-accent: #ff4444; /* runner dot, popups, finale */
+  --color-run: #ff4422;
+  --color-hike: #ff8c00;
+  --color-hike-line: #ff1a00;
+  --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  /* dark veil behind the title card and the finale */
+  --veil: radial-gradient(ellipse at center, rgba(15, 15, 15, 0.82) 0%, rgba(15, 15, 15, 0.94) 75%);
+  --edge: 20px;
+  --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* stacking order above the map (Leaflet uses up to 1000) */
+  --z-overlay: 1000;
+  --z-controls: 1001;
+  --z-veil: 1999;
+  --z-finale: 2000;
+  --z-intro: 2500;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-mono);
+  background: #000;
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+.app,
+.stage {
+  position: relative;
+  height: 100vh;
+}
+
+.stage__map {
+  height: 100%;
+  width: 100%;
+}
+
+/* Map attribution is not shown in the animation */
+.leaflet-bottom.leaflet-right {
+  display: none;
+}
+
+.status {
+  text-align: center;
+  padding: var(--edge);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-veil);
+  background: var(--veil);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.veil.is-visible {
+  opacity: 1;
+}
+
+@keyframes fade-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 0.95;
+    transform: translateY(0);
+  }
+}
