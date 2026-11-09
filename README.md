@@ -4,6 +4,12 @@ Animates a year of running routes from a **Strava bulk export** (GPX files). Eac
 
 The Strava REST API is no longer used: everything is read from the export folder on disk.
 
+| Title card | Runs | Hike | Finale |
+| --- | --- | --- | --- |
+| ![Title card: MY YEAR 2025, Running Munich, Hiking the Alps](docs/screenshots/intro.png) | ![Runs drawn at the same time, with a +10.0 km popup](docs/screenshots/runs.png) | ![Elevation profile of a hike with the red progress line](docs/screenshots/hike.png) | ![Finale: MY YEAR 2025, DONE!, 1684.9 km](docs/screenshots/finale.png) |
+
+*Frames from `npm run record` (all 2025 runs in Munich and hikes in the Alps).*
+
 ## Features
 
 - 🏃‍♂️ Several runs at once: run *n+1* starts `runStartIntervalSeconds` after run *n*, it does not wait for it to finish
@@ -11,6 +17,8 @@ The Strava REST API is no longer used: everything is read from the export folder
 - 📅 Airport-style flipping date display
 - ⛰️ Hikes: orange elevation profile (80% opacity) in the lower part of the screen, a red line runs over it from left to right; elevation gain and name below
 - 📊 Cumulative distance of all runs and hikes of the year (Strava's own distance from `activities.csv`), also those not drawn on the map
+- 🎬 Title card ("My year 2025 / Running Munich / Hiking the Alps") and a finale with the year, "DONE!" and the total km
+- 🎥 `npm run record` renders the animation as a 1080×1920 MP4 for Instagram stories
 - 📱 Map zooms to fit all routes; boards scale with the screen width
 - 🗺️ Dark map with a configurable center point and radius
 - No database, no login
