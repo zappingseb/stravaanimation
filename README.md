@@ -10,6 +10,8 @@ The Strava REST API is no longer used: everything is read from the export folder
 
 *Frames from `npm run record` (all 2025 runs in Munich and hikes in the Alps).*
 
+▶️ **Watch the full video:** [My Year 2025 on YouTube](https://youtube.com/shorts/u-xGleFsDeQ)
+
 ## Features
 
 - 🏃‍♂️ Several runs at once: run *n+1* starts `runStartIntervalSeconds` after run *n*, it does not wait for it to finish
