@@ -1,16 +1,56 @@
 {
-  "strava": {
-    "redirectUri": "http://localhost:3000/auth/strava/callback"
+  "data": {
+    "exportDir": "./strava-export",
+    "activityTypes": [
+      "Lauf",
+      "Run",
+      "Trail Run",
+      "Virtual Run"
+    ],
+    "hikeActivityTypes": [
+      "Wandern",
+      "Hike"
+    ],
+    "countedActivityTypes": [
+      "Lauf",
+      "Run",
+      "Trail Run",
+      "Virtual Run",
+      "Wandern",
+      "Hike"
+    ],
+    "hikeProfileSamples": 100,
+    "minPointSpacingMeters": 8
   },
   "animation": {
-    "startDate": "2024-01-01",
-    "endDate": "2024-12-31",
+    "startDate": "2025-01-01",
+    "endDate": "2025-12-31",
     "centerLat": 48.1632786590305,
     "centerLng": 11.593103827102233,
     "radiusMeters": 9000,
-    "animationDurationSeconds": 90
+    "runStartIntervalSeconds": 0.5,
+    "secondsPerKm": 0.35,
+    "minRunSeconds": 2,
+    "routeColor": "#ff5522",
+    "routeWeight": 3,
+    "routeOpacity": 0.35,
+    "routeBlend": "additive",
+    "hikeSeconds": 1.25
   },
-  "database": {
-    "mongoUri": "mongodb://localhost:27017/strava-runner"
+  "map": {
+    "tileUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+    "tileAttribution": "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
+    "tileMaxZoom": 16
+  },
+  "intro": {
+    "kicker": "My year",
+    "lines": [
+      "Running Munich",
+      "Hiking the Alps"
+    ],
+    "seconds": 3.5
+  },
+  "finale": {
+    "title": "DONE!"
   }
 }

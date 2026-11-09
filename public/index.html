@@ -3,116 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strava Runner Animation</title>
+    <title>Runner Animation</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="./css/components.css" />
-    <link rel="stylesheet" href="./css/stats_animation.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/split-flap.css" />
+    <link rel="stylesheet" href="css/boards.css" />
+    <link rel="stylesheet" href="css/intro.css" />
+    <link rel="stylesheet" href="css/hike-profile.css" />
+    <link rel="stylesheet" href="css/popup.css" />
+    <link rel="stylesheet" href="css/controls.css" />
 </head>
 <body>
-    <div id="app">
-        <div v-if="!authenticated && !loading" class="login-screen">
-            <div class="login-card">
-                <h1>🏃‍♂️ Runner Animation</h1>
-                <p>Connect your Strava account to visualize your running journey</p>
-                <a href="/auth/strava" class="strava-btn">Connect with Strava</a>
-            </div>
-        </div>
-
-        <div v-if="loading" class="loading">
-            <h2>Loading your running data...</h2>
-            <p v-if="syncStatus">{{ syncStatus }}</p>
-        </div>
-
-        <div v-if="authenticated && !loading" class="app">
-            <!-- Burger Menu -->
-            <div class="burger-menu" @click="toggleControls">
-                <div class="burger-line"></div>
-                <div class="burger-line"></div>
-                <div class="burger-line"></div>
-            </div>
-
-            <!-- Main Controls -->
-            <div class="controls" :class="{ 'visible': controlsVisible, 'hidden': !controlsVisible }">
-                <button @click="startAnimation" :disabled="isAnimating" class="btn">
-                    {{ isAnimating ? 'Playing...' : 'Start Animation' }}
-                </button>
-                <button @click="drawAllRoutes" :disabled="isAnimating" class="btn">
-                    Show All Routes
-                </button>
-                <button @click="clearRoutes" :disabled="isAnimating" class="btn">
-                    Clear Routes
-                </button>
-                <button @click="logout" class="btn">Logout</button>
-            </div>
-
-            <!-- Zoom Controls -->
-            <div class="zoom-controls">
-                <button @click="zoomIn" class="zoom-btn">+</button>
-                <button @click="zoomOut" class="zoom-btn">-</button>
-            </div>
-
-            <div class="map-container">
-                <div id="map"></div>
-                <div class="overlay grey"></div>
-                
-                <div class="overlay date-display">
-                    <div class="flap-display">
-                        <!-- Month Display (LETTER mode) -->
-                        <split-flap v-for="(char, index) in currentMonth.split('')" 
-                                   :key="`month-${index}`"
-                                   :index="index" 
-                                   :text="char"
-                                   mode="LETTER">
-                        </split-flap>
-                        
-                        <!-- Space separator -->
-                        <div class="split space"></div>
-                        
-                        <!-- Day Year Display (NUMBER mode) -->
-                        <split-flap v-for="(char, index) in currentDayYear" 
-                                   :key="`dayyear-${index}`"
-                                   :index="index + 10" 
-                                   :text="char"
-                                   :mode="isDigitOrDot(char) ? 'NUMBER' : 'LETTER'">
-                        </split-flap>
-                    </div>
-                </div>
-                
-                <div class="overlay stats-display">
-                    <div class="flap-display">
-                        <!-- KM Display (NUMBER mode) -->
-                        <split-flap v-for="(char, index) in currentKm" 
-                                   :key="`km-${index}`"
-                                   :index="index + 30" 
-                                   :text="char"
-                                   mode="NUMBER">
-                        </split-flap>
-                    </div>
-                    <div class="stats-label">km since Jan 1st</div>
-                </div>
-
-                <div class="overlay stats-current-activity" 
-                    v-show="showingActivityDistance" 
-                    :class="`animation-${animationPhase}`">
-                    <div class="stats-current-number">{{activityDistance}}</div>
-                </div>
-
-                <div v-if="runnerPosition" class="runner-icon" 
-                     :style="{ left: runnerPosition.x + 'px', top: runnerPosition.y + 'px' }">
-                </div>
-            </div>
-        </div>
-    </div>
-
-   <script type="module">
-      import { app } from './js/MainApp.js';
-      import { ApiService } from './js/ApiService.js';
-      window.mainApp = app;
-      window.mainApp.api = new ApiService();
-      window.mainApp.mount("#app")
-    </script>
+    <div id="app"></div>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

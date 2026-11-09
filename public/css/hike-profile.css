@@ -1,0 +1,68 @@
+/* Elevation profile of a hike, low on the screen (bottom edge at 25% of the height)
+   so it does not cover the city runs */
+.hike-profile {
+  position: absolute;
+  left: 50%;
+  bottom: 25%;
+  z-index: var(--z-overlay);
+  width: min(86vw, 560px);
+  transform: translateX(-50%) scale(0.92);
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hike-profile.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.hike-profile__chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.hike-profile__area {
+  fill: var(--color-hike);
+  fill-opacity: 0.8;
+}
+
+.hike-profile__line {
+  fill: none;
+  stroke: var(--color-hike-line);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hike-profile__dot {
+  fill: var(--color-hike-line);
+  stroke: var(--color-text);
+  stroke-width: 2;
+}
+
+.hike-profile__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 6px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.hike-profile__gain {
+  font-size: clamp(16px, 4.5vw, 24px);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.hike-profile__name {
+  overflow: hidden;
+  font-size: clamp(12px, 3.4vw, 16px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}

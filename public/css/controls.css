@@ -1,0 +1,81 @@
+/* Burger menu and zoom buttons (?controls=1) */
+.controls__burger {
+  position: absolute;
+  top: var(--edge);
+  right: var(--edge);
+  z-index: var(--z-controls);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.controls__burger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.controls__burger span {
+  width: 20px;
+  height: 2px;
+  background: var(--color-text);
+}
+
+.controls__menu {
+  position: absolute;
+  top: calc(var(--edge) + 50px); /* below the burger */
+  right: var(--edge);
+  z-index: var(--z-controls);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.controls__menu.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.controls__zoom {
+  position: absolute;
+  bottom: 80px;
+  left: var(--edge);
+  z-index: var(--z-controls);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.controls__button {
+  padding: 10px 20px;
+  border: 1px solid var(--color-text);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--color-text);
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.controls__button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.controls__button--square {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 20px;
+  font-weight: bold;
+}

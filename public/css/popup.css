@@ -1,0 +1,33 @@
+/* "+10.4" / "Let's Go!": flies in from below, flies out upwards (phases in DistancePopup.js) */
+.distance-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+
+.distance-popup__text {
+  font-size: min(5rem, 16vw); /* "Let's Go!" must fit a 360px phone */
+  font-weight: bold;
+  color: var(--color-accent);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.distance-popup.is-entering {
+  opacity: 0;
+  transform: translate(-50%, 200%) scale(0.5);
+}
+
+.distance-popup.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  transition: all 0.6s var(--ease-soft);
+}
+
+.distance-popup.is-exiting {
+  opacity: 0;
+  transform: translate(-50%, -200%) scale(0.8);
+  transition: all 0.1s ease-in;
+}
