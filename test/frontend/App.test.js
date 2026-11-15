@@ -32,8 +32,16 @@ describe("App", () => {
     assert.equal(vm.boardKm, 300);
   });
 
+  it("does not show run distances in the film, where runs start too fast to read them", () => {
+    const vm = app();
+    vm.onRunStart({ date: "2025-01-05T08:00:00Z", distance: 10404, cumulativeDistance: 42.1 });
+    assert.equal(vm.boardKm, 42.1);
+    assert.equal(vm.popup, null);
+  });
+
   it("updates the boards and shows the distance when a run starts", () => {
     const vm = app();
+    vm.filmOn = false;
     vm.onRunStart({ date: "2025-01-05T08:00:00Z", distance: 10404, cumulativeDistance: 42.1 });
     assert.equal(vm.boardDate, "2025-01-05T08:00:00Z");
     assert.equal(vm.boardKm, 42.1);
@@ -42,6 +50,7 @@ describe("App", () => {
 
   it("does not show run distances over a hike profile", () => {
     const vm = app();
+    vm.filmOn = false;
     vm.onHikeStart({ date: "2025-01-04T08:00:00Z", cumulativeDistance: 30 });
     vm.onRunStart({ date: "2025-01-05T08:00:00Z", distance: 5000, cumulativeDistance: 35 });
     assert.equal(vm.popup, null);

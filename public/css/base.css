@@ -13,6 +13,7 @@
 
   /* stacking order above the map (Leaflet uses up to 1000) */
   --z-overlay: 1000;
+  --z-film: 1000; /* after the boards in the DOM, so above them */
   --z-controls: 1001;
   --z-veil: 1999;
   --z-finale: 2000;

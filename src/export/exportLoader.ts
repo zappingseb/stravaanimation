@@ -1,7 +1,16 @@
 import path from "path";
 import { haversineMeters, LatLng } from "../geo";
-import { AnimationConfig, DataConfig, HikeActivity, LoadedExport, LoadSummary, RunActivity } from "../types";
-import { CsvActivity, readCsvActivities } from "./csv";
+import {
+  AnimationConfig,
+  DataConfig,
+  FilmConfig,
+  HikeActivity,
+  LoadedExport,
+  LoadSummary,
+  RunActivity,
+} from "../types";
+import { countKudos, CsvActivity, readCsvActivities } from "./csv";
+import { filmStats } from "./filmStats";
 import { elevationGain, elevationProfile } from "./elevationProfile";
 import { readTrack, Track } from "./gpx";
 import { createKmCounter, KmCounter } from "./kmCounter";
@@ -17,7 +26,7 @@ interface LoadContext {
   kmCounter: KmCounter;
 }
 
-export function loadExport(data: DataConfig, animation: AnimationConfig): LoadedExport {
+export function loadExport(data: DataConfig, animation: AnimationConfig, film: FilmConfig): LoadedExport {
   const exportDir = path.resolve(data.exportDir);
   const period = { start: new Date(animation.startDate), end: endOfDay(animation.endDate) };
   const inPeriod = (a: CsvActivity) => a.date >= period.start && a.date <= period.end;
@@ -37,7 +46,17 @@ export function loadExport(data: DataConfig, animation: AnimationConfig): Loaded
     countedActivities: kmCounter.count,
     totalKm: kmCounter.totalKm,
   };
-  return { runs: runs.activities, hikes, summary };
+  const stats = filmStats({
+    activities: all.filter(inPeriod),
+    runs: runs.activities,
+    hikes,
+    kudos: countKudos(exportDir, period.start, period.end),
+    year: period.start.getUTCFullYear(),
+    data,
+    film,
+    readTrack: (fileName) => readTrack(exportDir, fileName, data.minPointSpacingMeters),
+  });
+  return { runs: runs.activities, hikes, summary, film: stats };
 }
 
 /** Runs with a GPS track that start inside the area, sorted by date. */

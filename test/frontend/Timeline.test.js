@@ -54,6 +54,22 @@ describe("Timeline", () => {
     assert.equal(await played, true);
   });
 
+  it("draws every line but gives only every n-th run a dot", () => {
+    manualFrames();
+    const timeline = new Timeline(new MapView("map", mapConfig, {}), { ...options, runnerDotEvery: 2 }, recorder());
+    timeline.play([run("a", "2025-01-01"), run("b", "2025-01-02"), run("c", "2025-01-03")], []);
+    timeline.renderFrame(1100); // all three are running
+    assert.deepEqual(
+      timeline.runs.map((r) => Boolean(r.line)),
+      [true, true, true],
+    );
+    assert.deepEqual(
+      timeline.runs.map((r) => Boolean(r.dot)),
+      [true, false, true],
+    );
+    timeline.stop();
+  });
+
   it("resolves with false and hides the hike when stopped", async () => {
     manualFrames();
     const listener = recorder();

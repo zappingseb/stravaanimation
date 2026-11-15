@@ -11,7 +11,7 @@ const MIN_HIKE_MS = 600;
 // know about the UI:
 //   onRunStart(activity), onHikeStart(hike), onHikeProgress(progress 0..1), onHikeEnd()
 export class Timeline {
-  /** @param options { runStartIntervalSeconds, secondsPerKm, minRunSeconds, hikeSeconds } */
+  /** @param options { runStartIntervalSeconds, secondsPerKm, minRunSeconds, hikeSeconds, runnerDotEvery = 1 } */
   constructor(mapView, options, listener) {
     this.mapView = mapView;
     this.options = options;
@@ -26,9 +26,11 @@ export class Timeline {
   play(activities, hikes) {
     this.stop();
     const schedule = buildSchedule(activities, hikes, this.options.runStartIntervalSeconds * 1000);
-    this.runs = schedule.runs.map(({ activity, startAt }) => {
+    const dotEvery = this.options.runnerDotEvery ?? 1;
+    this.runs = schedule.runs.map(({ activity, startAt }, i) => {
       const durationMs = runDurationMs(activity.distance, this.options);
-      return new RunAnimation(activity, startAt, durationMs, this.mapView);
+      // every line is drawn, but only every n-th run gets a runner dot
+      return new RunAnimation(activity, startAt, durationMs, this.mapView, { withDot: i % dotEvery === 0 });
     });
     this.hikes = new HikeQueue(schedule.hikes, { maxMs: this.options.hikeSeconds * 1000, minMs: MIN_HIKE_MS });
 

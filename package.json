@@ -9,6 +9,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "type-check": "tsc --noEmit",
     "record": "npm run build && node dist/record/record.js",
+    "sound": "npm run build && node dist/sound/sound.js",
     "test": "tsc && node --test \"dist/**/*.test.js\" \"test/**/*.test.js\""
   },
   "dependencies": {

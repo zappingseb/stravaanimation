@@ -10,10 +10,12 @@
 
 import { ChildProcess, spawn } from "child_process";
 import path from "path";
+import fs from "fs";
 import { chromium, Page } from "playwright-core";
 import { appConfig } from "../config";
 import { installVirtualClock, VirtualClock } from "./virtualClock";
 import { VideoEncoder } from "./videoEncoder";
+import { PartSegment, SoundTimeline } from "../sound/SoundTimeline";
 
 // 360x640 CSS pixels at 3x density = 1080x1920
 const VIEWPORT = { width: 360, height: 640 };
@@ -93,15 +95,25 @@ async function waitUntilReady(page: Page, frameMs: number): Promise<void> {
   for (let i = 0; i < SETTLE_FRAMES; i++) await step(page, frameMs);
 }
 
-async function recordFrames(page: Page, video: VideoEncoder, opts: Options): Promise<void> {
+/** What was recorded: the length of the video and when the app entered each phase (seconds of video). */
+interface Recorded {
+  seconds: number;
+  phaseSeconds: Record<string, number>;
+}
+
+async function recordFrames(page: Page, video: VideoEncoder, opts: Options): Promise<Recorded> {
   const frameMs = 1000 / opts.fps;
   const holdFrames = Math.round(opts.hold * opts.fps);
   const started = Date.now();
+  const phaseSeconds: Record<string, number> = {};
   let framesSinceFinale = -1;
+  let frames = 0;
 
   for (let frame = 0; frame < MAX_VIDEO_SECONDS * opts.fps; frame++) {
     const status = await step(page, frameMs);
     await video.write(await page.screenshot({ type: "jpeg", quality: JPEG_QUALITY }));
+    frames++;
+    if (status && phaseSeconds[status.phase] === undefined) phaseSeconds[status.phase] = frame / opts.fps;
 
     if (status?.phase === "finale" && framesSinceFinale < 0) framesSinceFinale = 0;
     if (framesSinceFinale >= 0 && ++framesSinceFinale >= holdFrames) break;
@@ -112,6 +124,18 @@ async function recordFrames(page: Page, video: VideoEncoder, opts: Options): Pro
   }
   process.stdout.write("\n");
   if (framesSinceFinale < 0) console.warn(`Stopped after ${MAX_VIDEO_SECONDS} s without reaching the finale`);
+  return { seconds: frames / opts.fps, phaseSeconds };
+}
+
+/** Writes where every part of the film starts next to the video; `npm run sound` places the sound with it. */
+async function writeTimeline(page: Page, recorded: Recorded, videoFile: string): Promise<void> {
+  const parts = await page.evaluate(() => {
+    const app = (window as unknown as { runnerAnimation: { filmSegments?(part: string): PartSegment[] } })
+      .runnerAnimation;
+    return app.filmSegments ? { opening: app.filmSegments("opening"), stats: app.filmSegments("stats") } : null;
+  });
+  const timeline = parts && SoundTimeline.build(recorded.phaseSeconds, parts.opening, parts.stats, recorded.seconds);
+  timeline?.write(videoFile); // none for a recording without the film (?film=0)
 }
 
 async function main(): Promise<void> {
@@ -143,8 +167,9 @@ async function main(): Promise<void> {
       void (window as unknown as { runnerAnimation: { play(): Promise<void> } }).runnerAnimation.play();
     });
     video = new VideoEncoder(opts.out, opts.fps);
-    await recordFrames(page, video, opts);
+    const recorded = await recordFrames(page, video, opts);
     await video.finish();
+    await writeTimeline(page, recorded, opts.out);
     console.log(`Done: ${opts.out}`);
   } catch (error) {
     video?.abort();

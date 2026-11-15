@@ -70,6 +70,11 @@ export class MapView {
     this.map.fitBounds(bounds, { paddingTopLeft: [16, boardHeight], paddingBottomRight: [16, boardHeight] });
   }
 
+  /** Pixel position of [lat, lng] inside the map element. */
+  containerPoint(latLng) {
+    return this.map.latLngToContainerPoint(latLng);
+  }
+
   addActiveRoute(start) {
     return L.polyline([start], this.polylineOptions(this.activeCanvas)).addTo(this.map);
   }
