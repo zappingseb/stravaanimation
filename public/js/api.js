@@ -7,11 +7,12 @@ async function fetchJson(url) {
 
 /** Everything the app needs, loaded in parallel. */
 export async function loadData() {
-  const [config, activities, hikes, summary] = await Promise.all([
+  const [config, activities, hikes, summary, filmStats] = await Promise.all([
     fetchJson("/api/config"),
     fetchJson("/api/activities"),
     fetchJson("/api/hikes"),
     fetchJson("/api/summary"),
+    fetchJson("/api/film"),
   ]);
-  return { config, activities, hikes, summary };
+  return { config, activities, hikes, summary, filmStats };
 }

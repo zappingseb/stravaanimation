@@ -16,18 +16,20 @@ describe("loadData", () => {
     globalThis.fetch = realFetch;
   });
 
-  it("loads config, runs, hikes and summary", async () => {
+  it("loads config, runs, hikes, summary and film stats", async () => {
     stubFetch({
       "/api/config": { body: { animation: {} } },
       "/api/activities": { body: [{ id: "1" }] },
       "/api/hikes": { body: [] },
       "/api/summary": { body: { totalKm: 1 } },
+      "/api/film": { body: { year: 2025 } },
     });
     assert.deepEqual(await loadData(), {
       config: { animation: {} },
       activities: [{ id: "1" }],
       hikes: [],
       summary: { totalKm: 1 },
+      filmStats: { year: 2025 },
     });
   });
 
@@ -37,6 +39,7 @@ describe("loadData", () => {
       "/api/activities": { status: 500, body: { error: "Loading export failed: no activities.csv" } },
       "/api/hikes": { body: [] },
       "/api/summary": { body: {} },
+      "/api/film": { body: {} },
     });
     await assert.rejects(loadData(), /no activities\.csv/);
   });

@@ -1,0 +1,26 @@
+/* Canvas of the year film (title, stat scenes); transparent while the city tracks run. */
+
+.film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-film);
+  pointer-events: none;
+}
+
+/* The map is enlarged by the "most run spot" scene */
+.stage {
+  overflow: hidden;
+}
+
+.date-board,
+.distance-board {
+  transition: opacity 0.3s ease;
+}
+
+.stage.is-film-scene .date-board,
+.stage.is-film-scene .distance-board,
+.stage.is-film-scene .distance-popup {
+  opacity: 0;
+}

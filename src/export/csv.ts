@@ -11,6 +11,9 @@ export interface CsvActivity {
   elevationGainMeters: number | null;
   /** Relative to the export folder, e.g. "activities/123.gpx"; empty for manual/treadmill entries */
   fileName: string;
+  /** Only read for the year film (film stats) */
+  movingSeconds?: number | null;
+  maxElevationMeters?: number | null;
 }
 
 // Column names differ with the language the export was made in.
@@ -22,8 +25,10 @@ const REQUIRED_COLUMNS = {
   distance: ["Distanz", "Distance"],
   fileName: ["Dateiname", "Filename"],
 };
-/** Optional: only used for the hike overlay label. */
+/** Optional: used for the hike overlay label and the year film. */
 const ELEVATION_GAIN_COLUMN = ["Höhenzunahme", "Elevation Gain"];
+const MOVING_TIME_COLUMN = ["Bewegungszeit", "Moving Time"];
+const MAX_ELEVATION_COLUMN = ["Max. Höhe", "Elevation High"];
 
 /** RFC 4180: quoted fields may contain commas, doubled quotes ("") and newlines. */
 export function parseCsv(text: string): string[][] {
@@ -99,9 +104,23 @@ export function readCsvActivities(exportDir: string): CsvActivity[] {
       distanceMeters: parseNumber(row[columns.distance]),
       elevationGainMeters: columns.elevationGain >= 0 ? parseNumber(row[columns.elevationGain]) : null,
       fileName: row[columns.fileName] ?? "",
+      movingSeconds: columns.movingTime >= 0 ? parseNumber(row[columns.movingTime]) : null,
+      maxElevationMeters: columns.maxElevation >= 0 ? parseNumber(row[columns.maxElevation]) : null,
     });
   }
   return activities;
+}
+
+/** Number of kudos given in the period (reactions.csv: date, type, ...); null when the export has no such file. */
+export function countKudos(exportDir: string, start: Date, end: Date): number | null {
+  const csvPath = path.join(exportDir, "reactions.csv");
+  if (!fs.existsSync(csvPath)) return null;
+  let count = 0;
+  for (const row of parseCsv(fs.readFileSync(csvPath, "utf8").replace(/^\uFEFF/, "")).slice(1)) {
+    const date = parseCsvDate(row[0] ?? "");
+    if (date && date >= start && date <= end && (row[1] ?? "").trim() === "Kudos") count++;
+  }
+  return count;
 }
 
 function findColumns(header: string[], csvPath: string) {
@@ -123,7 +142,12 @@ function findColumns(header: string[], csvPath: string) {
     const names = missing.map(([name]) => name).join(", ");
     throw new Error(`${csvPath}: missing columns ${names} (header: ${header.join(" | ")})`);
   }
-  return { ...columns, elevationGain: indexOf(ELEVATION_GAIN_COLUMN) };
+  return {
+    ...columns,
+    elevationGain: indexOf(ELEVATION_GAIN_COLUMN),
+    movingTime: indexOf(MOVING_TIME_COLUMN),
+    maxElevation: indexOf(MAX_ELEVATION_COLUMN),
+  };
 }
 
 function parseNumber(value: string | undefined): number | null {

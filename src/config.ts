@@ -16,6 +16,7 @@ export const appConfig: AppConfig = {
 /** The part of the configuration the browser needs. */
 export function apiConfig(): ApiConfig {
   const { animation, intro, finale, map } = appConfig;
+  const { photoDir: _photoDir, ...film } = appConfig.film;
   const { centerLat, centerLng, radiusMeters } = animation;
-  return { animation, intro, finale, map: { ...map, centerLat, centerLng, radiusMeters } };
+  return { animation, intro, finale, film, map: { ...map, centerLat, centerLng, radiusMeters } };
 }

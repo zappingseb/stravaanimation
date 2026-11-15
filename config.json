@@ -52,5 +52,254 @@
   },
   "finale": {
     "title": "DONE!"
+  },
+  "film": {
+    "timeZone": "Europe/Berlin",
+    "citySeconds": 8,
+    "sceneSeconds": 4.5,
+    "holdSeconds": 1,
+    "counterStartShare": 0.15,
+    "hotspotMinMetersFromStart": 1000,
+    "sportNames": {
+      "Lauf": "Running",
+      "Wandern": "Hiking",
+      "Skilanglaufen": "Cross-country ski",
+      "Ski Alpin": "Alpine ski",
+      "Radfahrt": "Cycling",
+      "Spaziergang": "Walking",
+      "Run": "Running",
+      "Hike": "Hiking",
+      "Nordic Ski": "Cross-country ski",
+      "Alpine Ski": "Alpine ski",
+      "Ride": "Cycling",
+      "Walk": "Walking"
+    },
+    "elevationExcludedTypes": [
+      "Ski Alpin",
+      "Alpine Ski"
+    ],
+    "series": {
+      "label": "Hikes with the Kraxe",
+      "caption": "Kid on the back · since 2021",
+      "keywords": [
+        "Kraxe",
+        "Doppelanhänger"
+      ],
+      "highlightKeyword": "Doppelanhänger"
+    },
+    "placesHeadline": "4 countries,",
+    "places": [
+      {
+        "name": "Tegernsee",
+        "lat": 47.714,
+        "lng": 11.758
+      },
+      {
+        "name": "Werdenfels",
+        "lat": 47.45,
+        "lng": 11.08
+      },
+      {
+        "name": "Chiemgau",
+        "lat": 47.733,
+        "lng": 12.212
+      },
+      {
+        "name": "Saalach",
+        "lat": 47.659,
+        "lng": 12.582
+      },
+      {
+        "name": "Allgäu",
+        "lat": 47.57,
+        "lng": 10.551
+      },
+      {
+        "name": "Anhalter Hütte",
+        "lat": 47.31,
+        "lng": 10.6
+      },
+      {
+        "name": "South Tyrol",
+        "lat": 46.703,
+        "lng": 11.204
+      },
+      {
+        "name": "Kronplatz",
+        "lat": 46.74,
+        "lng": 11.961
+      },
+      {
+        "name": "Lago di Como",
+        "lat": 46.153,
+        "lng": 9.314
+      },
+      {
+        "name": "Thuringia",
+        "lat": 51.159,
+        "lng": 11.286,
+        "highlight": true
+      }
+    ],
+    "coldest": {
+      "name": "Kronplatz Ski Tag",
+      "date": "DEC 30 · KRONPLATZ",
+      "temperatureC": -14
+    },
+    "hottest": {
+      "name": "Mal kurz zum Bäcker",
+      "date": "JUN 01 · LAGO DI COMO",
+      "temperatureC": 25
+    },
+    "photoDir": "./film-photos",
+    "photos": {
+      "fastest": {
+        "file": "jahresziel.jpg",
+        "focus": 0.55
+      },
+      "longest": {
+        "file": "urlaub_heute.jpg",
+        "focus": 0.45
+      },
+      "highest": {
+        "file": "anhalter_huette.jpg"
+      },
+      "hilliest": {
+        "file": "wallberg.jpg",
+        "focus": 0.78
+      },
+      "series": {
+        "file": "kraxe_picture.jpg",
+        "focus": 0.3
+      },
+      "coldest": {
+        "file": "kronplatz_ski_day.jpg"
+      },
+      "lastRun": {
+        "file": "kronplatz_runde.jpg"
+      },
+      "hottest": {
+        "file": "baecker.jpg",
+        "focus": 0.3
+      }
+    },
+    "titleSeconds": 1.2,
+    "titles": {
+      "city": "Running the city",
+      "hotspot": "Location favourite",
+      "earlyBird": "Time for sports?",
+      "fastest": "Fastest run",
+      "longest": "Longest run",
+      "days": "Active days",
+      "kudos": "👍",
+      "months": "Month by month",
+      "sports": "Which sports?",
+      "alps": "Where?",
+      "highest": "Highest peak",
+      "hilliest": "Strongest climb",
+      "everest": "Everesting?",
+      "series": "With kids",
+      "coldest": "Temperature favourites",
+      "lastRun": "Last run",
+      "finale": "The End"
+    },
+    "texts": {
+      "hotspot": "{count} of {of} runs went through this 100 m stretch of the English Garden.",
+      "kudos": "Cheering for friends: about {perDay} a day, every day of the year."
+    }
+  },
+  "sound": {
+    "assetDir": "./sound-assets",
+    "targetLufs": -14,
+    "music": {
+      "file": "./sound-assets/soundtrack.mp3",
+      "startSeconds": 0,
+      "gainDb": -12,
+      "fadeOutSeconds": 3,
+      "duck": {
+        "threshold": 0.02,
+        "ratio": 6,
+        "attackMs": 30,
+        "releaseMs": 450
+      }
+    },
+    "voice": {
+      "voiceId": "DduhIyyKkOosbP8VefhP",
+      "model": "eleven_v3",
+      "style": "[excited]",
+      "gainDb": 0
+    },
+    "effects": {
+      "swoosh": {"prompt": "Short soft airy swoosh, a fast pass-by, clean and dry, no reverb", "seconds": 0.6, "gainDb": -6},
+      "whoosh": {"prompt": "Deep cinematic whoosh that opens up, smooth, about one second", "seconds": 1.2, "gainDb": -4},
+      "pop": {"prompt": "One single soft bubble pop, short, clean and dry", "seconds": 0.5, "gainDb": -6},
+      "popDeep": {"prompt": "One single deep round bubble pop with some bass, short and dry", "seconds": 0.6, "gainDb": -3},
+      "popStream": {"prompt": "A rapid stream of many tiny soft bubble pops, like popcorn popping fast, steady and dry", "seconds": 3, "gainDb": -8},
+      "beads": {"prompt": "Hundreds of small plastic beads raining down and piling up into a heap", "seconds": 1.5, "gainDb": -4},
+      "flaps": {"prompt": "A mechanical split-flap airport departure board flipping rapidly and then settling", "seconds": 1.6, "gainDb": -6},
+      "ticks": {"prompt": "Fast light ticking clicks, like a counter running up quickly, steady and dry", "seconds": 4, "gainDb": -12},
+      "bell": {"prompt": "One single bright bell ding, clean and short", "seconds": 1, "gainDb": -6},
+      "rise": {"prompt": "A smooth synth tone gliding steadily upward and ending on a bright note", "seconds": 3, "gainDb": -12},
+      "cheer": {"prompt": "A short sports arena crowd cheer with applause", "seconds": 2.5, "gainDb": -8},
+      "stamp": {"prompt": "One single rubber stamp thud on paper, short and dry", "seconds": 0.5, "gainDb": -4},
+      "wind": {"prompt": "A short icy cold wind gust", "seconds": 1.5, "gainDb": -8},
+      "sizzle": {"prompt": "A short hot sizzle, like water on a hot pan", "seconds": 1.2, "gainDb": -10},
+      "boom": {"prompt": "One soft low boom, deep and warm, short", "seconds": 1, "gainDb": -4}
+    },
+    "cues": [
+      {"at": "title", "offset": 0.0, "effect": "boom"},
+      {"at": "title", "offset": 0.7, "effect": "flaps"},
+      {"at": "title", "offset": 0.1, "say": "Ladies and gentlemen… twenty twenty-five!"},
+      {"at": "transition", "effect": "swoosh"},
+      {"at": "intro", "offset": 0.05, "effect": "popDeep", "gainDb": -3},
+      {"at": "city", "offset": 0.0, "effect": "ticks", "repeat": {"count": 2, "everySeconds": 4}},
+      {"at": "city", "offset": 1.0, "say": "One hundred thirty-five runs through Munich!"},
+      {"at": "hotspot", "offset": 0.0, "effect": "whoosh"},
+      {"at": "hotspot", "offset": 1.9, "effect": "flaps"},
+      {"at": "earlyBird", "offset": 0.0, "effect": "ticks", "gainDb": 3},
+      {"at": "earlyBird", "offset": 3.1, "effect": "bell"},
+      {"at": "earlyBird", "offset": 1.2, "say": "Out the door at eight!"},
+      {"at": "fastest", "offset": 0.0, "effect": "rise"},
+      {"at": "fastest", "offset": 2.5, "effect": "bell"},
+      {"at": "fastest", "offset": 0.8, "say": "Four sixteen per kilometre. Personal best!"},
+      {"at": "longest", "offset": 0.2, "effect": "rise", "gainDb": -3},
+      {"at": "longest", "offset": 2.5, "effect": "pop"},
+      {"at": "longest", "offset": 0.8, "say": "Thirty-three kilometres. On holiday!"},
+      {"at": "longest>days", "offset": 0.0, "effect": "swoosh"},
+      {"at": "longest>days", "offset": 0.45, "effect": "pop"},
+      {"at": "days", "offset": 0.0, "effect": "popStream"},
+      {"at": "days", "offset": 3.1, "effect": "bell", "gainDb": -4},
+      {"at": "days", "offset": 0.8, "say": "Two hundred seventy-three active days!"},
+      {"at": "days>kudos", "offset": 0.0, "effect": "beads"},
+      {"at": "days>kudos", "offset": 1.0, "effect": "swoosh"},
+      {"at": "kudos", "offset": 0.0, "effect": "popStream", "gainDb": 3},
+      {"at": "kudos", "offset": 0.0, "effect": "flaps", "gainDb": -4},
+      {"at": "kudos>months", "offset": 0.0, "effect": "whoosh", "gainDb": -4},
+      {"at": "months", "offset": 0.15, "effect": "pop", "repeat": {"count": 12, "everySeconds": 0.233}},
+      {"at": "months", "offset": 3.2, "effect": "bell"},
+      {"at": "months", "offset": 1.0, "say": "September takes the crown!"},
+      {"at": "sports", "offset": 0.3, "effect": "popDeep"},
+      {"at": "sports", "offset": 1.65, "effect": "pop", "repeat": {"count": 5, "everySeconds": 0.315}},
+      {"at": "alps", "offset": 0.6, "effect": "pop", "repeat": {"count": 10, "everySeconds": 0.245}},
+      {"at": "alps", "offset": 1.2, "say": "Ten places, four countries!"},
+      {"at": "highest", "offset": 0.5, "effect": "rise"},
+      {"at": "highest", "offset": 0.4, "effect": "flaps", "gainDb": -4},
+      {"at": "highest", "offset": 1.0, "say": "Two thousand one hundred ninety-eight metres!"},
+      {"at": "hilliest", "offset": 0.5, "effect": "rise", "gainDb": -2},
+      {"at": "everest", "offset": 0.0, "effect": "rise"},
+      {"at": "everest", "offset": 2.7, "effect": "cheer"},
+      {"at": "everest", "offset": 1.4, "say": "That's Mount Everest… twice!"},
+      {"at": "series", "offset": 0.8, "effect": "stamp", "repeat": {"count": 6, "everySeconds": 0.38}},
+      {"at": "coldest", "offset": 0.2, "effect": "wind"},
+      {"at": "coldest", "offset": 1.9, "effect": "sizzle"},
+      {"at": "coldest", "offset": 0.5, "say": "From minus fourteen… to plus twenty-five!"},
+      {"at": "coldest>lastRun", "offset": 0.0, "effect": "whoosh"},
+      {"at": "lastRun", "offset": 1.4, "effect": "flaps", "gainDb": -3},
+      {"at": "lastRun", "offset": 0.4, "say": "The last run of the year!"},
+      {"at": "finale", "offset": 0.0, "effect": "boom"},
+      {"at": "finale", "offset": 1.0, "effect": "flaps"},
+      {"at": "finale", "offset": 2.4, "effect": "cheer"},
+      {"at": "finale", "offset": 0.5, "say": "Sixteen eighty-four point nine kilometres. Done!"}
+    ]
   }
 }

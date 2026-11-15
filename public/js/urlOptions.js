@@ -1,6 +1,7 @@
 // URL parameters override config.json for quick experiments, e.g.
 //   /?interval=0.5&secondsPerKm=0.3&opacity=0.2&color=33aaff&blend=normal
 //   /?autoplay=0&intro=0&controls=1
+//   /?film=0   only the city tracks with hikes, without the stat scenes
 
 const NUMBER_PARAMS = {
   interval: "runStartIntervalSeconds",
@@ -27,5 +28,6 @@ export function readUrlOptions(search = window.location.search) {
     autoplay: params.get("autoplay") !== "0",
     intro: params.get("intro") !== "0",
     controls: params.get("controls") === "1",
+    film: params.get("film") !== "0",
   };
 }
