@@ -9,7 +9,7 @@ The Strava REST API is not used: everything is read from the export folder on di
 
 *Frames of the film for 2025 (runs in Munich, hikes in the Alps). The screens with personal photos are not shown here.*
 
-▶️ **An earlier version without the stat screens:** [My Year 2025 on YouTube](https://youtube.com/shorts/u-xGleFsDeQ)
+▶️ **Watch the film:** [My Year 2025 on YouTube](https://youtube.com/shorts/P2Cp8hPMQqY)
 
 ## Features
 
